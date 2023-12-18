@@ -5,7 +5,13 @@ import (
 	"os"
 )
 
-func Load(ctx context.Context, env string, projectDirName string) (*ServerConfig, error) {
+type LoadServerConfig struct{}
+
+func NewLoadServerConfig() *LoadServerConfig {
+	return &LoadServerConfig{}
+}
+
+func (l *LoadServerConfig) Load(ctx context.Context, env string, projectDirName string) (*ServerConfig, error) {
 
 	// Load environment variables
 	err := ReadEnvfile(ctx, env, projectDirName)
