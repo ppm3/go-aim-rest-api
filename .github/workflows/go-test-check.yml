@@ -20,18 +20,20 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: 1.18
-      
-      - name: Github Action for testing the code
-        run: |
-          go clean -testcache
-          go test ./...
 
       - name: Github Action to retrieve coverage percentage
         id: total-coverage
         run: |
-          coverage=$(go tool cover -func=coverage.out | grep total | awk '{print $3}')
-            if [ "$coverage" -lt "$MIN_COVERAGE_REQUIRED" ]; then
-            echo "Coverage is too low: $coverage%"
+          echo "Running tests..."
+          go test -coverprofile=coverage.out ./...
+          go tool cover -func=coverage.out -o coverage.txt
+          COVERAGE=$(awk '{print $3}' coverage.txt | grep -Eo '[0-9]+(\.[0-9]+)?' | awk '{sum+=$1} END {print sum/NR}')
+          echo "Total coverage: $COVERAGE%"
+          if (( $(echo "$COVERAGE < 80" | bc -l) )); then
+            echo "Code coverage is less than 80%. Please add more tests."
             exit 1
           fi
-
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
