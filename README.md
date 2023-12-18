@@ -1,4 +1,4 @@
-# AIM API REST
+# AIM API REST [![GoLang CI Coverage](https://github.com/ppm3/go-aim-rest-api/actions/workflows/go-test-check.yml/badge.svg)](https://github.com/ppm3/go-aim-rest-api/actions/workflows/go-test-check.yml)
 
 A brief description of the project.
 
