@@ -1,0 +1,17 @@
+image: golang:1.18
+
+stages:
+  - test
+  - coverage
+
+test:
+  stage: test
+  script:
+    - go test -v ./...
+
+coverage:
+  stage: coverage
+  depends_on: test
+  script:
+    - go tool cover -func=coverage.out
+    - echo "Coverage: $(go tool cover -func=coverage.out | grep total | awk '{print $3}')%"
