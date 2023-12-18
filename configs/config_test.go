@@ -45,7 +45,7 @@ func TestLoad(t *testing.T) {
 				Environment:    "test",
 			},
 			args: args{
-				env:            "test",
+				env:            "testing",
 				projectDirName: projectDirName,
 				ctx:            context.Background(),
 			},

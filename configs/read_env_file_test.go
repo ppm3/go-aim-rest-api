@@ -20,7 +20,7 @@ func TestReadEnvfile(t *testing.T) {
 			name: "Read the .env file and works successfully",
 			args: args{
 				ctx:            context.Background(),
-				env:            "test",
+				env:            "testing",
 				projectDirName: "go-aim-rest-api",
 			},
 			wantErr: false,
@@ -38,7 +38,7 @@ func TestReadEnvfile(t *testing.T) {
 			name: "Error when recived wrong directory name",
 			args: args{
 				ctx:            context.Background(),
-				env:            "test",
+				env:            "testing",
 				projectDirName: "x",
 			},
 			wantErr: true,
