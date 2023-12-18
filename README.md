@@ -2,6 +2,8 @@
 
 A brief description of the project.
 
+[![codecov](https://codecov.io/gh/ppm3/go-aim-rest-api/graph/badge.svg?token=40DKC8NY7J)](https://codecov.io/gh/ppm3/go-aim-rest-api)
+
 ## Table of Contents
 
 - [Installation](#installation)
