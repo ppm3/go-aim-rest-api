@@ -8,6 +8,7 @@ import (
 
 func TestLoad(t *testing.T) {
 	var projectDirName string = "go-aim-rest-api"
+	var config *LoadServerConfig = NewLoadServerConfig()
 	type args struct {
 		ctx            context.Context
 		env            string
@@ -85,7 +86,7 @@ func TestLoad(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := Load(tt.args.ctx, tt.args.env, tt.args.projectDirName)
+			got, err := config.Load(tt.args.ctx, tt.args.env, tt.args.projectDirName)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Load() error = %v, wantErr %v", err, tt.wantErr)
 				return
