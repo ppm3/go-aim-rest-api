@@ -3,6 +3,7 @@ package configs
 import (
 	"context"
 	"os"
+	"strconv"
 )
 
 type LoadServerConfig struct{}
@@ -20,6 +21,17 @@ func (l *LoadServerConfig) Load(ctx context.Context, env string, projectDirName 
 		return nil, err
 	}
 
+	var maxPoolSizeStr string = os.Getenv("MONGODB_MAX_POOL_SIZE")
+	MaxPoolSize, err := strconv.Atoi(maxPoolSizeStr)
+	if err != nil {
+		return nil, err
+	}
+	var ConnectTimeoutStr string = os.Getenv("MONGODB_CONNECT_TIMEOUT")
+	ConnectTimeout, err := strconv.Atoi(ConnectTimeoutStr)
+	if err != nil {
+		return nil, err
+	}
+
 	config := &ServerConfig{
 		ProjectName:    os.Getenv("PROJECT_NAME"),
 		ProjectVersion: os.Getenv("PROJECT_VERSION"),
@@ -27,6 +39,7 @@ func (l *LoadServerConfig) Load(ctx context.Context, env string, projectDirName 
 		Server: ServerInitConfig{
 			Url:  os.Getenv("SERVER_URL"),
 			Port: os.Getenv("SERVER_PORT"),
+			Mode: os.Getenv("SERVER_MODE"),
 		},
 		Mysql: MysqlDBConfig{
 			Host:     os.Getenv("MYSQL_HOST"),
@@ -35,12 +48,17 @@ func (l *LoadServerConfig) Load(ctx context.Context, env string, projectDirName 
 			Password: os.Getenv("MYSQL_PASSWORD"),
 			Database: os.Getenv("MYSQL_DATABASE"),
 		},
+
 		Mongo: MongoDBConfig{
-			Host:     os.Getenv("MONGODB_HOST"),
-			Port:     os.Getenv("MONGODB_PORT"),
-			Username: os.Getenv("MONGODB_USERNAME"),
-			Password: os.Getenv("MONGODB_PASSWORD"),
-			Database: os.Getenv("MONGODB_DATABASE"),
+			Protocol:       os.Getenv("MONGODB_PROTOCOL"),
+			Host:           os.Getenv("MONGODB_HOST"),
+			Port:           os.Getenv("MONGODB_PORT"),
+			Username:       os.Getenv("MONGODB_USERNAME"),
+			Password:       os.Getenv("MONGODB_PASSWORD"),
+			Database:       os.Getenv("MONGODB_DATABASE"),
+			AuthSource:     os.Getenv("MONGODB_AUTH_SOURCE"),
+			MaxPoolSize:    MaxPoolSize,
+			ConnectTimeout: ConnectTimeout,
 		},
 	}
 
