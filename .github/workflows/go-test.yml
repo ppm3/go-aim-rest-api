@@ -1,28 +1,28 @@
 name: GoLang CI Test 
 
 on:
-    push:
-        branches:
-            - main
-    pull_request:
-        branches:
-            - main
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-    go-test:
-        name: Run Tests
-        runs-on: ubuntu-latest
+  go-test:
+    name: Run Tests
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-            - name: Set up Go
-              uses: actions/setup-go@v2
-              with:
-                 go-version: 1.18
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+            go-version: 1.18
 
-            - name: Run Tests
-              run: |
-                go clean -testcache
-                go test -v ./...
+      - name: Run Tests
+        run: |
+          go clean -testcache
+          go test -v ./...
