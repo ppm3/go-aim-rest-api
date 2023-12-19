@@ -1,8 +1,8 @@
-# AIM API REST [![GoLang CI Coverage](https://github.com/ppm3/go-aim-rest-api/actions/workflows/go-test-check.yml/badge.svg)](https://github.com/ppm3/go-aim-rest-api/actions/workflows/go-test-check.yml)
+# AIM API REST [![GoLang CI Coverage](https://github.com/ppm3/go-aim-rest-api/actions/workflows/go-test-check.yml/badge.svg)](https://github.com/ppm3/go-aim-rest-api/actions/workflows/go-test-check.yml) [![GoLang CI Test](https://github.com/ppm3/go-aim-rest-api/actions/workflows/go-test.yml/badge.svg)](https://github.com/ppm3/go-aim-rest-api/actions/workflows/go-test.yml) [![codecov](https://codecov.io/gh/ppm3/go-aim-rest-api/graph/badge.svg?token=40DKC8NY7J)](https://codecov.io/gh/ppm3/go-aim-rest-api)
 
 A brief description of the project.
 
-[![codecov](https://codecov.io/gh/ppm3/go-aim-rest-api/graph/badge.svg?token=40DKC8NY7J)](https://codecov.io/gh/ppm3/go-aim-rest-api)
+
 
 ## Table of Contents
 
