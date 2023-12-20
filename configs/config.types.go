@@ -10,11 +10,14 @@ type ServerConfig struct {
 }
 
 type MysqlDBConfig struct {
-	Host     string
-	Port     string
-	Username string
-	Password string
-	Database string
+	Host        string
+	Port        string
+	Username    string
+	Password    string
+	Database    string
+	MaxOpenCon  int
+	MaxLifeTime int
+	MaxidleCon  int
 }
 
 type MongoDBConfig struct {

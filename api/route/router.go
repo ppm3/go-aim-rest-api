@@ -18,6 +18,7 @@ func SetupRouter(ctx context.Context, c controllers.Controllers, router *gin.Eng
 	router.GET("/ping", c.PingController.Pong)
 	router.GET("/health-check/api", c.HealthController.CheckHealth)
 	router.GET("/health-check/db/mongo", c.HealthMongoDBController.CheckHealthDB)
+	router.GET("/health-check/db/mysql", c.HealthMySQLController.CheckHealthDB)
 
 	return router
 }
