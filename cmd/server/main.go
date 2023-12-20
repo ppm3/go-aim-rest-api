@@ -59,11 +59,25 @@ func main() {
 		log.Fatal("Failed to connect to MongoDB:", err)
 	}
 
+	// Connect to MySQL
+	var mysqlDBActions databases.MySQLActionsI = databases.NewMySQLActions(app.ctx, &configParams.Mysql)
+
+	mysqlClient, err := mysqlDBActions.MySQLConnect()
+	if err != nil {
+		log.Fatal("Failed to connect to MySQL:", err)
+	}
+
 	// Create a new clients
-	var clientsDB databases.Clients = *databases.NewClients(mongoClient)
+	var clientsDB databases.Clients = *databases.NewClients(mongoClient, mysqlClient)
 
 	// Create a new controllers
-	var controllers controllers.Controllers = *controllers.NewControllers(ctx, &clientsDB, mongoDBActions, *configParams)
+	var controllers controllers.Controllers = *controllers.NewControllers(
+		ctx,
+		&clientsDB,
+		mongoDBActions,
+		mysqlDBActions,
+		*configParams,
+	)
 
 	// Create a new Gin-gonic router
 	app.Router = route.SetupRouter(app.ctx, controllers, app.Router)

@@ -9,13 +9,15 @@ import (
 type Controllers struct {
 	PingController          *PingController
 	HealthController        *HealthController
+	HealthMySQLController   *HealthMySQLController
 	HealthMongoDBController *HealthMongoDBController
 }
 
-func NewControllers(ctx context.Context, c *databases.Clients, m databases.MongoDBActionsI, p configs.ServerConfig) *Controllers {
+func NewControllers(ctx context.Context, c *databases.Clients, mda databases.MongoDBActionsI, msa databases.MySQLActionsI, p configs.ServerConfig) *Controllers {
 	return &Controllers{
 		PingController:          NewPingController(ctx, p),
 		HealthController:        NewHealthController(ctx, p),
-		HealthMongoDBController: NewHealthMongoDBController(ctx, c, m, p),
+		HealthMySQLController:   NewHealthMySQLController(ctx, c, msa, p),
+		HealthMongoDBController: NewHealthMongoDBController(ctx, c, mda, p),
 	}
 }

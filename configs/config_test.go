@@ -30,11 +30,14 @@ func TestLoad(t *testing.T) {
 					Port: "9999",
 				},
 				Mysql: MysqlDBConfig{
-					Host:     "localhost",
-					Port:     "3306",
-					Username: "root",
-					Password: "password",
-					Database: "mydatabase",
+					Host:        "localhost",
+					Port:        "3306",
+					Username:    "root",
+					Password:    "password",
+					Database:    "mydatabase",
+					MaxOpenCon:  1,
+					MaxLifeTime: 1,
+					MaxidleCon:  1,
 				},
 				Mongo: MongoDBConfig{
 					Host:           "localhost",
@@ -57,26 +60,6 @@ func TestLoad(t *testing.T) {
 				ctx:            context.Background(),
 			},
 			wantErr: false,
-		},
-		{
-			name: "Returned error for max env",
-			want: nil,
-			args: args{
-				env:            "testing_error_max",
-				projectDirName: projectDirName,
-				ctx:            cxt,
-			},
-			wantErr: true,
-		},
-		{
-			name: "Returned error for connect env",
-			want: nil,
-			args: args{
-				env:            "testing_error_connect",
-				projectDirName: projectDirName,
-				ctx:            cxt,
-			},
-			wantErr: true,
 		},
 		{
 			name:    "Unset environment",

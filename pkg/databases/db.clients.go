@@ -8,11 +8,12 @@ import (
 
 type Clients struct {
 	MongoDB *mongo.Client
-	Mysql   *sql.DB
+	MySQL   *sql.DB
 }
 
-func NewClients(m *mongo.Client) *Clients {
+func NewClients(mongo *mongo.Client, mysql *sql.DB) *Clients {
 	return &Clients{
-		MongoDB: m,
+		MongoDB: mongo,
+		MySQL:   mysql,
 	}
 }

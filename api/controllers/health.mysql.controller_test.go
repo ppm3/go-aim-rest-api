@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"net/http"
 	"net/http/httptest"
@@ -12,24 +13,22 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/mock"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func mockMongoSetUp(mc *mongo.Client, mP bool, mD bool, errCon error, errPing error, errDB error) databases.MongoDBActionsI {
-	var m *databases.MockMongoDBActions = new(databases.MockMongoDBActions)
+func mockMySQLSetUp(mc *sql.DB, mP bool, errCon error, errPing error) databases.MySQLActionsI {
+	var m *databases.MockMySQLActions = new(databases.MockMySQLActions)
 
-	m.On("MongoConnect", mock.Anything).Return(mc, errCon)
-	m.On("MongoPing", mock.Anything).Return(mP, errPing)
-	m.On("MongoPingDB", mock.Anything).Return(mD, errDB)
+	m.On("MySQLConnect", mock.Anything).Return(mc, errCon)
+	m.On("MySQLPing", mock.Anything).Return(mP, errPing)
 
 	return m
 }
 
-func TestHealthMongoDBController_CheckHealthDB(t *testing.T) {
+func TestHealthMySQLController_CheckHealthDB(t *testing.T) {
 	type fields struct {
 		ctx          context.Context
 		clients      *databases.Clients
-		mongoActions databases.MongoDBActionsI
+		mysqlActions databases.MySQLActionsI
 		configParams *configs.ServerConfig
 	}
 	type args struct {
@@ -38,7 +37,7 @@ func TestHealthMongoDBController_CheckHealthDB(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	mc := &mongo.Client{}
+	mc := &sql.DB{}
 
 	tests := []struct {
 		name   string
@@ -50,7 +49,7 @@ func TestHealthMongoDBController_CheckHealthDB(t *testing.T) {
 			fields: fields{
 				ctx:          ctx,
 				clients:      &databases.Clients{},
-				mongoActions: mockMongoSetUp(mc, true, true, nil, nil, nil),
+				mysqlActions: mockMySQLSetUp(mc, true, nil, nil),
 				configParams: &configs.ServerConfig{},
 			},
 			args: args{
@@ -59,11 +58,11 @@ func TestHealthMongoDBController_CheckHealthDB(t *testing.T) {
 			},
 		},
 		{
-			name: "Error request with status mongo ping failure",
+			name: "Failed request with status internal server error",
 			fields: fields{
 				ctx:          ctx,
 				clients:      &databases.Clients{},
-				mongoActions: mockMongoSetUp(mc, false, true, nil, errors.New("mock error"), nil),
+				mysqlActions: mockMySQLSetUp(mc, false, nil, errors.New("mock error")),
 				configParams: &configs.ServerConfig{},
 			},
 			args: args{
@@ -71,30 +70,18 @@ func TestHealthMongoDBController_CheckHealthDB(t *testing.T) {
 				status: http.StatusInternalServerError,
 			},
 		},
-		{
-			name: "Error request with status db ping failure",
-			fields: fields{
-				ctx:          ctx,
-				clients:      &databases.Clients{},
-				mongoActions: mockMongoSetUp(mc, true, false, nil, nil, errors.New("mock error")),
-				configParams: &configs.ServerConfig{},
-			},
-			args: args{
-				c:      &gin.Context{},
-				status: http.StatusBadGateway,
-			},
-		},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			router := gin.Default()
+		router := gin.Default()
 
-			h := &HealthMongoDBController{
+		t.Run(tt.name, func(t *testing.T) {
+			h := &HealthMySQLController{
 				ctx:          tt.fields.ctx,
 				clients:      tt.fields.clients,
-				mongoActions: tt.fields.mongoActions,
+				mysqlActions: tt.fields.mysqlActions,
 				configParams: tt.fields.configParams,
 			}
+
 			router.GET("/test", h.CheckHealthDB)
 
 			req, err := http.NewRequest("GET", "/test", nil)
@@ -113,38 +100,38 @@ func TestHealthMongoDBController_CheckHealthDB(t *testing.T) {
 	}
 }
 
-func TestNewHealthMongoDBController(t *testing.T) {
+func TestNewHealthMySQLController(t *testing.T) {
 	type args struct {
 		ctx context.Context
 		c   *databases.Clients
-		m   databases.MongoDBActionsI
+		m   databases.MySQLActionsI
 		p   configs.ServerConfig
 	}
 	tests := []struct {
 		name string
 		args args
-		want *HealthMongoDBController
+		want *HealthMySQLController
 	}{
 		{
-			name: "Successful creation of HealthMongoDBController",
+			name: "Successful creation of HealthMySQLController",
 			args: args{
 				ctx: context.Background(),
 				c:   &databases.Clients{},
-				m:   &databases.MockMongoDBActions{},
+				m:   &databases.MockMySQLActions{},
 				p:   configs.ServerConfig{},
 			},
-			want: &HealthMongoDBController{
+			want: &HealthMySQLController{
 				ctx:          context.Background(),
 				clients:      &databases.Clients{},
-				mongoActions: &databases.MockMongoDBActions{},
+				mysqlActions: &databases.MockMySQLActions{},
 				configParams: &configs.ServerConfig{},
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewHealthMongoDBController(tt.args.ctx, tt.args.c, tt.args.m, tt.args.p); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewHealthMongoDBController() = %v, want %v", got, tt.want)
+			if got := NewHealthMySQLController(tt.args.ctx, tt.args.c, tt.args.m, tt.args.p); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewHealthMySQLController() = %v, want %v", got, tt.want)
 			}
 		})
 	}

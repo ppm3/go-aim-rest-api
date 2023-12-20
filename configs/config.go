@@ -21,16 +21,22 @@ func (l *LoadServerConfig) Load(ctx context.Context, env string, projectDirName 
 		return nil, err
 	}
 
+	// mysql
+	var maxOpenConStr string = os.Getenv("MYSQL_MAX_OPEN_CON")
+	maxOpenCon, _ := strconv.Atoi(maxOpenConStr)
+
+	var maxLifeTimeStr string = os.Getenv("MYSQL_MAX_LIFE_TIME")
+	maxLifeTime, _ := strconv.Atoi(maxLifeTimeStr)
+
+	var maxidleConStr string = os.Getenv("MYSQL_MAX_IDLE_CON")
+	maxidleCon, _ := strconv.Atoi(maxidleConStr)
+
+	// mongodb
 	var maxPoolSizeStr string = os.Getenv("MONGODB_MAX_POOL_SIZE")
-	MaxPoolSize, err := strconv.Atoi(maxPoolSizeStr)
-	if err != nil {
-		return nil, err
-	}
+	maxPoolSize, _ := strconv.Atoi(maxPoolSizeStr)
+
 	var ConnectTimeoutStr string = os.Getenv("MONGODB_CONNECT_TIMEOUT")
-	ConnectTimeout, err := strconv.Atoi(ConnectTimeoutStr)
-	if err != nil {
-		return nil, err
-	}
+	connectTimeout, _ := strconv.Atoi(ConnectTimeoutStr)
 
 	config := &ServerConfig{
 		ProjectName:    os.Getenv("PROJECT_NAME"),
@@ -42,11 +48,14 @@ func (l *LoadServerConfig) Load(ctx context.Context, env string, projectDirName 
 			Mode: os.Getenv("SERVER_MODE"),
 		},
 		Mysql: MysqlDBConfig{
-			Host:     os.Getenv("MYSQL_HOST"),
-			Port:     os.Getenv("MYSQL_PORT"),
-			Username: os.Getenv("MYSQL_USERNAME"),
-			Password: os.Getenv("MYSQL_PASSWORD"),
-			Database: os.Getenv("MYSQL_DATABASE"),
+			Host:        os.Getenv("MYSQL_HOST"),
+			Port:        os.Getenv("MYSQL_PORT"),
+			Username:    os.Getenv("MYSQL_USERNAME"),
+			Password:    os.Getenv("MYSQL_PASSWORD"),
+			Database:    os.Getenv("MYSQL_DATABASE"),
+			MaxOpenCon:  maxOpenCon,
+			MaxLifeTime: maxLifeTime,
+			MaxidleCon:  maxidleCon,
 		},
 
 		Mongo: MongoDBConfig{
@@ -57,8 +66,8 @@ func (l *LoadServerConfig) Load(ctx context.Context, env string, projectDirName 
 			Password:       os.Getenv("MONGODB_PASSWORD"),
 			Database:       os.Getenv("MONGODB_DATABASE"),
 			AuthSource:     os.Getenv("MONGODB_AUTH_SOURCE"),
-			MaxPoolSize:    MaxPoolSize,
-			ConnectTimeout: ConnectTimeout,
+			MaxPoolSize:    maxPoolSize,
+			ConnectTimeout: connectTimeout,
 		},
 	}
 
