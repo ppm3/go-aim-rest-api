@@ -41,10 +41,7 @@ func (h *HealthMongoDBController) CheckHealthDB(c *gin.Context) {
 			c.AbortWithStatus(http.StatusBadGateway)
 		} else {
 			c.JSON(http.StatusOK, gin.H{
-				"status":  "ok",
-				"uptime":  uptime,
-				"dabase":  "Databse is available",
-				"message": "Server is up and running",
+				"uptime": uptime,
 			})
 		}
 	}
