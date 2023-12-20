@@ -7,6 +7,7 @@ import (
 	"ppm3/go-aim-rest-api/api/controllers"
 	"ppm3/go-aim-rest-api/api/route"
 	"ppm3/go-aim-rest-api/configs"
+	"ppm3/go-aim-rest-api/pkg/databases"
 
 	"github.com/gin-gonic/gin"
 )
@@ -32,21 +33,37 @@ func newApp(ctx context.Context, p configs.ServerConfig) *App {
 
 func main() {
 	var configParams *configs.ServerConfig
-	var err error
 
+	// Load configuration
 	var ctx context.Context = context.Background()
 
-	configParams, err = config.Load(ctx, os.Getenv("ENVIRONMENT"), projectDirName)
+	configParams, err := config.Load(ctx, os.Getenv("ENVIRONMENT"), projectDirName)
 	if err != nil {
 		log.Fatal("Failed to load configuration:", err)
 	}
 
+	// Set Gin-gonic mode
+	gin.SetMode(configParams.Server.Mode)
+
+	// Create a new app
 	var app App = *newApp(
 		ctx,
 		*configParams,
 	)
 
-	var controllers controllers.Controllers = *controllers.NewControllers(ctx, *configParams)
+	// Connect to MongoDB
+	var mongoDBActions databases.MongoDBActionsI = databases.NewMongoDBActions(app.ctx, &configParams.Mongo)
+
+	mongoClient, err := mongoDBActions.MongoConnect()
+	if err != nil {
+		log.Fatal("Failed to connect to MongoDB:", err)
+	}
+
+	// Create a new clients
+	var clientsDB databases.Clients = *databases.NewClients(mongoClient)
+
+	// Create a new controllers
+	var controllers controllers.Controllers = *controllers.NewControllers(ctx, &clientsDB, mongoDBActions, *configParams)
 
 	// Create a new Gin-gonic router
 	app.Router = route.SetupRouter(app.ctx, controllers, app.Router)

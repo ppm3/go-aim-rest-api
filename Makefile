@@ -41,6 +41,8 @@ test/coverage:
 deps:
 	$(GOGET)  github.com/gin-gonic/gin
 	$(GOGET)  go.mongodb.org/mongo-driver/mongo
+	$(GOGET)  go.mongodb.org/mongo-driver/mongo/options
 	$(GOGET)  github.com/go-sql-driver/mysql
 	$(GOGET)  github.com/joho/godotenv
 	$(GOGET)  github.com/stretchr/testify/assert
+	$(GOGET)  github.com/stretchr/testify/mock
