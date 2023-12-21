@@ -46,3 +46,4 @@ deps:
 	$(GOGET)  github.com/joho/godotenv
 	$(GOGET)  github.com/stretchr/testify/assert
 	$(GOGET)  github.com/stretchr/testify/mock
+	$(GOGET)  github.com/streadway/amqp

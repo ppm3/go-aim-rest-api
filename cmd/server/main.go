@@ -8,6 +8,7 @@ import (
 	"ppm3/go-aim-rest-api/api/route"
 	"ppm3/go-aim-rest-api/configs"
 	"ppm3/go-aim-rest-api/pkg/databases"
+	"ppm3/go-aim-rest-api/pkg/rabbitmq"
 
 	"github.com/gin-gonic/gin"
 )
@@ -70,12 +71,21 @@ func main() {
 	// Create a new clients
 	var clientsDB databases.Clients = *databases.NewClients(mongoClient, mysqlClient)
 
+	// // RabbitMQ connection
+	var rabbitMQActions rabbitmq.RabbitMQActionsI = rabbitmq.NewRabbitMQConnect(app.ctx, &configParams.RabbitMQ)
+	rabbitClient, err := rabbitMQActions.Connect()
+	if err != nil {
+		log.Fatal("Failed to connect to RabbitMQ:", err)
+	}
+
 	// Create a new controllers
 	var controllers controllers.Controllers = *controllers.NewControllers(
 		ctx,
 		&clientsDB,
+		rabbitClient,
 		mongoDBActions,
 		mysqlDBActions,
+		rabbitMQActions,
 		*configParams,
 	)
 

@@ -63,9 +63,9 @@ func (m *MongoDBActions) MongoConnect() (*mongo.Client, error) {
 	err = client.Ping(ctx, nil)
 	if err != nil {
 		return nil, err
-	} else {
-		log.Print("Connected to MongoDB!")
 	}
+
+	log.Print("[OK] Connected to MongoDB!")
 
 	return client, nil
 }
