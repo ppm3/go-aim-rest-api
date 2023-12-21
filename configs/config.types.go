@@ -8,6 +8,7 @@ type ServerConfig struct {
 	Mysql          MysqlDBConfig
 	Mongo          MongoDBConfig
 	RabbitMQ       RabbitMQConfig
+	Redis          RedisConfig
 }
 
 type RabbitMQConfig struct {
@@ -38,6 +39,20 @@ type MongoDBConfig struct {
 	AuthSource     string
 	MaxPoolSize    int
 	ConnectTimeout int
+}
+
+type RedisConfig struct {
+	Host         string
+	Port         string
+	Password     string
+	Database     string
+	DialTimeout  int
+	ReadTimeout  int
+	WriteTimeout int
+	PoolSize     int
+	MinIdleConns int
+	IdleTimeout  int
+	MaxRetries   int
 }
 
 type ServerInitConfig struct {

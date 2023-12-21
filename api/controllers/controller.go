@@ -5,7 +5,9 @@ import (
 	"ppm3/go-aim-rest-api/configs"
 	"ppm3/go-aim-rest-api/pkg/databases"
 	"ppm3/go-aim-rest-api/pkg/rabbitmq"
+	redisAction "ppm3/go-aim-rest-api/pkg/redis"
 
+	"github.com/go-redis/redis"
 	"github.com/streadway/amqp"
 )
 
@@ -15,15 +17,18 @@ type Controllers struct {
 	HealthMySQLController    *HealthMySQLController
 	HealthMongoDBController  *HealthMongoDBController
 	HealthRabbitMQController *HealthRabbitMQController
+	HealthRedisController    *HealthRedisController
 }
 
 func NewControllers(
 	ctx context.Context,
 	c *databases.Clients,
-	r *amqp.Connection,
+	rMQ *amqp.Connection,
+	r *redis.Client,
 	mda databases.MongoDBActionsI,
 	msa databases.MySQLActionsI,
-	ra rabbitmq.RabbitMQActionsI,
+	rma rabbitmq.RabbitMQActionsI,
+	ra redisAction.RedisActionsI,
 	p configs.ServerConfig,
 ) *Controllers {
 	return &Controllers{
@@ -31,6 +36,7 @@ func NewControllers(
 		HealthController:         NewHealthController(ctx, p),
 		HealthMySQLController:    NewHealthMySQLController(ctx, c, msa, p),
 		HealthMongoDBController:  NewHealthMongoDBController(ctx, c, mda, p),
-		HealthRabbitMQController: NewHealthRabbitMQController(ctx, r, ra, p),
+		HealthRabbitMQController: NewHealthRabbitMQController(ctx, rMQ, rma, p),
+		HealthRedisController:    NewHealthRedisController(ctx, r, ra, p),
 	}
 }

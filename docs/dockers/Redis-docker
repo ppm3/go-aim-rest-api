@@ -1,0 +1,2 @@
+docker rm -f local-redis
+docker run -d --name local-redis -p 6379:6379 -e REDIS_PASSWORD=password -v /var/lib/redis/data:/data redis:latest redis-server --requirepass password
