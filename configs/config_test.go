@@ -50,6 +50,12 @@ func TestLoad(t *testing.T) {
 					MaxPoolSize:    1,
 					ConnectTimeout: 1,
 				},
+				RabbitMQ: RabbitMQConfig{
+					Host:     "localhost",
+					Port:     "5672",
+					Username: "guest",
+					Password: "guest",
+				},
 				ProjectName:    "test",
 				ProjectVersion: "1.0.0",
 				Environment:    "test",

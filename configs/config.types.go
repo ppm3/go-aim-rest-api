@@ -7,6 +7,14 @@ type ServerConfig struct {
 	Server         ServerInitConfig
 	Mysql          MysqlDBConfig
 	Mongo          MongoDBConfig
+	RabbitMQ       RabbitMQConfig
+}
+
+type RabbitMQConfig struct {
+	Host     string
+	Port     string
+	Username string
+	Password string
 }
 
 type MysqlDBConfig struct {

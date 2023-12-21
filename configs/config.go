@@ -42,11 +42,13 @@ func (l *LoadServerConfig) Load(ctx context.Context, env string, projectDirName 
 		ProjectName:    os.Getenv("PROJECT_NAME"),
 		ProjectVersion: os.Getenv("PROJECT_VERSION"),
 		Environment:    os.Getenv("ENVIRONMENT"),
+
 		Server: ServerInitConfig{
 			Url:  os.Getenv("SERVER_URL"),
 			Port: os.Getenv("SERVER_PORT"),
 			Mode: os.Getenv("SERVER_MODE"),
 		},
+
 		Mysql: MysqlDBConfig{
 			Host:        os.Getenv("MYSQL_HOST"),
 			Port:        os.Getenv("MYSQL_PORT"),
@@ -68,6 +70,13 @@ func (l *LoadServerConfig) Load(ctx context.Context, env string, projectDirName 
 			AuthSource:     os.Getenv("MONGODB_AUTH_SOURCE"),
 			MaxPoolSize:    maxPoolSize,
 			ConnectTimeout: connectTimeout,
+		},
+
+		RabbitMQ: RabbitMQConfig{
+			Host:     os.Getenv("RABBITMQ_HOST"),
+			Port:     os.Getenv("RABBITMQ_PORT"),
+			Username: os.Getenv("RABBITMQ_USERNAME"),
+			Password: os.Getenv("RABBITMQ_PASSWORD"),
 		},
 	}
 

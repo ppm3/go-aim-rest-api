@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"log"
 	"ppm3/go-aim-rest-api/configs"
 	"time"
 
@@ -57,6 +58,8 @@ func (m *MySQLActions) MySQLConnect() (*sql.DB, error) {
 	db.SetConnMaxLifetime(time.Duration(m.params.MaxLifeTime) * 3)
 	db.SetMaxOpenConns(m.params.MaxOpenCon)
 	db.SetMaxIdleConns(m.params.MaxidleCon)
+
+	log.Print("[OK] Connected to Mysql!")
 
 	return db, nil
 }
