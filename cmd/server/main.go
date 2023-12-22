@@ -9,6 +9,7 @@ import (
 	"ppm3/go-aim-rest-api/configs"
 	"ppm3/go-aim-rest-api/pkg/databases"
 	"ppm3/go-aim-rest-api/pkg/rabbitmq"
+	redisAction "ppm3/go-aim-rest-api/pkg/redis"
 
 	"github.com/gin-gonic/gin"
 )
@@ -71,11 +72,18 @@ func main() {
 	// Create a new clients
 	var clientsDB databases.Clients = *databases.NewClients(mongoClient, mysqlClient)
 
-	// // RabbitMQ connection
+	// RabbitMQ connection
 	var rabbitMQActions rabbitmq.RabbitMQActionsI = rabbitmq.NewRabbitMQConnect(app.ctx, &configParams.RabbitMQ)
 	rabbitClient, err := rabbitMQActions.Connect()
 	if err != nil {
 		log.Fatal("Failed to connect to RabbitMQ:", err)
+	}
+
+	// Redis connection
+	var redisActions redisAction.RedisActionsI = redisAction.NewRedisConnect(app.ctx, &configParams.Redis)
+	redisClient, err := redisActions.Connect()
+	if err != nil {
+		log.Fatal("Failed to connect to Redis:", err)
 	}
 
 	// Create a new controllers
@@ -83,9 +91,11 @@ func main() {
 		ctx,
 		&clientsDB,
 		rabbitClient,
+		redisClient,
 		mongoDBActions,
 		mysqlDBActions,
 		rabbitMQActions,
+		redisActions,
 		*configParams,
 	)
 

@@ -35,8 +35,30 @@ func (l *LoadServerConfig) Load(ctx context.Context, env string, projectDirName 
 	var maxPoolSizeStr string = os.Getenv("MONGODB_MAX_POOL_SIZE")
 	maxPoolSize, _ := strconv.Atoi(maxPoolSizeStr)
 
-	var ConnectTimeoutStr string = os.Getenv("MONGODB_CONNECT_TIMEOUT")
-	connectTimeout, _ := strconv.Atoi(ConnectTimeoutStr)
+	var connectTimeoutStr string = os.Getenv("MONGODB_CONNECT_TIMEOUT")
+	connectTimeout, _ := strconv.Atoi(connectTimeoutStr)
+
+	// redis
+	var redisDialTimeoutStr string = os.Getenv("REDIS_DIAL_TIMEOUT")
+	redisDialTimeout, _ := strconv.Atoi(redisDialTimeoutStr)
+
+	var redisReadTimeoutStr string = os.Getenv("REDIS_READ_TIMEOUT")
+	redisReadTimeout, _ := strconv.Atoi(redisReadTimeoutStr)
+
+	var redisWriteTimeoutStr string = os.Getenv("REDIS_WRITE_TIMEOUT")
+	redisWriteTimeout, _ := strconv.Atoi(redisWriteTimeoutStr)
+
+	var redisPoolSizeStr string = os.Getenv("REDIS_POOL_SIZE")
+	redisPoolSize, _ := strconv.Atoi(redisPoolSizeStr)
+
+	var redisMinIdleConnsStr string = os.Getenv("REDIS_MIN_IDLE_CONNS")
+	redisMinIdleConns, _ := strconv.Atoi(redisMinIdleConnsStr)
+
+	var redisIdleTimeoutStr string = os.Getenv("REDIS_IDLE_TIMEOUT")
+	redisIdleTimeout, _ := strconv.Atoi(redisIdleTimeoutStr)
+
+	var redisMaxRetriesStr string = os.Getenv("REDIS_MAX_RETRIES")
+	redisMaxRetries, _ := strconv.Atoi(redisMaxRetriesStr)
 
 	config := &ServerConfig{
 		ProjectName:    os.Getenv("PROJECT_NAME"),
@@ -77,6 +99,20 @@ func (l *LoadServerConfig) Load(ctx context.Context, env string, projectDirName 
 			Port:     os.Getenv("RABBITMQ_PORT"),
 			Username: os.Getenv("RABBITMQ_USERNAME"),
 			Password: os.Getenv("RABBITMQ_PASSWORD"),
+		},
+
+		Redis: RedisConfig{
+			Host:         os.Getenv("REDIS_HOST"),
+			Port:         os.Getenv("REDIS_PORT"),
+			Password:     os.Getenv("REDIS_PASSWORD"),
+			Database:     os.Getenv("REDIS_DB"),
+			DialTimeout:  redisDialTimeout,
+			ReadTimeout:  redisReadTimeout,
+			WriteTimeout: redisWriteTimeout,
+			PoolSize:     redisPoolSize,
+			MinIdleConns: redisMinIdleConns,
+			IdleTimeout:  redisIdleTimeout,
+			MaxRetries:   redisMaxRetries,
 		},
 	}
 
