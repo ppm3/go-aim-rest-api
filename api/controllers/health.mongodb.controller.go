@@ -26,17 +26,17 @@ func NewHealthMongoDBController(ctx context.Context, c *databases.Clients, m dat
 	}
 }
 
-func (h *HealthMongoDBController) CheckHealthDB(c *gin.Context) {
+func (h *HealthMongoDBController) Ping(c *gin.Context) {
 	mc := h.clients.MongoDB
 
 	uptime := time.Now().Unix()
 
 	// Check the connection
-	_, err := h.mongoActions.MongoPing(mc)
+	_, err := h.mongoActions.Ping(mc)
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 	} else {
-		_, err := h.mongoActions.MongoPingDB(mc)
+		_, err := h.mongoActions.PingDB(mc)
 		if err != nil {
 			c.AbortWithStatus(http.StatusBadGateway)
 		} else {

@@ -27,7 +27,7 @@ func NewHealthRabbitMQController(ctx context.Context, r *amqp.Connection, rMQ ra
 	}
 }
 
-func (h *HealthRabbitMQController) CheckHealthRabbitMQ(c *gin.Context) {
+func (h *HealthRabbitMQController) Ping(c *gin.Context) {
 	var conn *amqp.Connection = h.rabbitConnect
 	uptime := time.Now().Unix()
 

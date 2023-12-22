@@ -18,9 +18,9 @@ import (
 func mockMongoSetUp(mc *mongo.Client, mP bool, mD bool, errCon error, errPing error, errDB error) databases.MongoDBActionsI {
 	var m *databases.MockMongoDBActions = new(databases.MockMongoDBActions)
 
-	m.On("MongoConnect", mock.Anything).Return(mc, errCon)
-	m.On("MongoPing", mock.Anything).Return(mP, errPing)
-	m.On("MongoPingDB", mock.Anything).Return(mD, errDB)
+	m.On("Connect", mock.Anything).Return(mc, errCon)
+	m.On("Ping", mock.Anything).Return(mP, errPing)
+	m.On("PingDB", mock.Anything).Return(mD, errDB)
 
 	return m
 }
@@ -95,7 +95,7 @@ func TestHealthMongoDBController_CheckHealthDB(t *testing.T) {
 				mongoActions: tt.fields.mongoActions,
 				configParams: tt.fields.configParams,
 			}
-			router.GET("/test", h.CheckHealthDB)
+			router.GET("/test", h.Ping)
 
 			req, err := http.NewRequest("GET", "/test", nil)
 			if err != nil {

@@ -17,7 +17,7 @@ func TestCheckHealth(t *testing.T) {
 
 	cp := &configs.ServerConfig{}
 	controller := NewHealthController(c, *cp)
-	router.GET("/test", controller.CheckHealth)
+	router.GET("/test", controller.Ping)
 
 	req, err := http.NewRequest("GET", "/test", nil)
 	if err != nil {

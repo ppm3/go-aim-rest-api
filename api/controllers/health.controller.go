@@ -21,7 +21,7 @@ func NewHealthController(ctx context.Context, p configs.ServerConfig) *HealthCon
 	}
 }
 
-func (hc *HealthController) CheckHealth(c *gin.Context) {
+func (hc *HealthController) Ping(c *gin.Context) {
 	uptime := time.Now().Unix()
 	c.JSON(http.StatusOK, gin.H{
 		"uptime": uptime,

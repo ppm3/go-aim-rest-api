@@ -18,8 +18,8 @@ import (
 func mockMySQLSetUp(mc *sql.DB, mP bool, errCon error, errPing error) databases.MySQLActionsI {
 	var m *databases.MockMySQLActions = new(databases.MockMySQLActions)
 
-	m.On("MySQLConnect", mock.Anything).Return(mc, errCon)
-	m.On("MySQLPing", mock.Anything).Return(mP, errPing)
+	m.On("Connect", mock.Anything).Return(mc, errCon)
+	m.On("Ping", mock.Anything).Return(mP, errPing)
 
 	return m
 }
@@ -82,7 +82,7 @@ func TestHealthMySQLController_CheckHealthDB(t *testing.T) {
 				configParams: tt.fields.configParams,
 			}
 
-			router.GET("/test", h.CheckHealthDB)
+			router.GET("/test", h.Ping)
 
 			req, err := http.NewRequest("GET", "/test", nil)
 			if err != nil {

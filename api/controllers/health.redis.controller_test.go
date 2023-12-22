@@ -82,7 +82,7 @@ func TestHealthRedisController_CheckHealthRedis(t *testing.T) {
 				redisActions: tt.fields.redisActions,
 			}
 
-			router.GET("/test", h.CheckHealthRedis)
+			router.GET("/test", h.Ping)
 
 			req, err := http.NewRequest("GET", "/test", nil)
 			if err != nil {
