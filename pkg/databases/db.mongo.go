@@ -11,9 +11,9 @@ import (
 )
 
 type MongoDBActionsI interface {
-	MongoConnect() (*mongo.Client, error)
-	MongoPing(c *mongo.Client) (bool, error)
-	MongoPingDB(c *mongo.Client) (bool, error)
+	Connect() (*mongo.Client, error)
+	Ping(c *mongo.Client) (bool, error)
+	PingDB(c *mongo.Client) (bool, error)
 }
 
 type MongoDBActions struct {
@@ -28,7 +28,7 @@ func NewMongoDBActions(ctx context.Context, p *configs.MongoDBConfig) MongoDBAct
 	}
 }
 
-func (m *MongoDBActions) MongoConnect() (*mongo.Client, error) {
+func (m *MongoDBActions) Connect() (*mongo.Client, error) {
 	// Set connection options
 	var mc configs.MongoDBConfig = *m.params
 	var uri string
@@ -70,7 +70,7 @@ func (m *MongoDBActions) MongoConnect() (*mongo.Client, error) {
 	return client, nil
 }
 
-func (m *MongoDBActions) MongoPing(c *mongo.Client) (bool, error) {
+func (m *MongoDBActions) Ping(c *mongo.Client) (bool, error) {
 	// Check the connection
 	err := c.Ping(m.ctx, nil)
 	if err != nil {
@@ -80,7 +80,7 @@ func (m *MongoDBActions) MongoPing(c *mongo.Client) (bool, error) {
 	}
 }
 
-func (m *MongoDBActions) MongoPingDB(c *mongo.Client) (bool, error) {
+func (m *MongoDBActions) PingDB(c *mongo.Client) (bool, error) {
 	// Check the connection
 	var database *mongo.Database = c.Database(m.params.Database)
 	err := database.RunCommand(m.ctx, map[string]interface{}{"ping": 1}).Err()

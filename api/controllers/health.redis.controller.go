@@ -27,7 +27,7 @@ func NewHealthRedisController(ctx context.Context, r *redis.Client, rA redisActi
 	}
 }
 
-func (h *HealthRedisController) CheckHealthRedis(c *gin.Context) {
+func (h *HealthRedisController) Ping(c *gin.Context) {
 
 	_, err := h.redisActions.Ping(h.redisClient)
 

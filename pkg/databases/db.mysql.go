@@ -22,8 +22,8 @@ type ConfigParams struct {
 }
 
 type MySQLActionsI interface {
-	MySQLConnect() (*sql.DB, error)
-	MySQLPing(c *sql.DB) (bool, error)
+	Connect() (*sql.DB, error)
+	Ping(c *sql.DB) (bool, error)
 }
 
 type MySQLActions struct {
@@ -38,7 +38,7 @@ func NewMySQLActions(ctx context.Context, p *configs.MysqlDBConfig) MySQLActions
 	}
 }
 
-func (m *MySQLActions) MySQLConnect() (*sql.DB, error) {
+func (m *MySQLActions) Connect() (*sql.DB, error) {
 
 	// Initialize configParams.Mysql here...
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
@@ -64,7 +64,7 @@ func (m *MySQLActions) MySQLConnect() (*sql.DB, error) {
 	return db, nil
 }
 
-func (m *MySQLActions) MySQLPing(c *sql.DB) (bool, error) {
+func (m *MySQLActions) Ping(c *sql.DB) (bool, error) {
 	err := c.Ping()
 	if err != nil {
 		return false, err

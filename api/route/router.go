@@ -16,11 +16,11 @@ func SetupRouter(ctx context.Context, c controllers.Controllers, router *gin.Eng
 	})
 
 	router.GET("/ping", c.PingController.Pong)
-	router.GET("/health-check/api", c.HealthController.CheckHealth)
-	router.GET("/health-check/db/mongo", c.HealthMongoDBController.CheckHealthDB)
-	router.GET("/health-check/db/mysql", c.HealthMySQLController.CheckHealthDB)
-	router.GET("/health-check/rabbitmq", c.HealthRabbitMQController.CheckHealthRabbitMQ)
-	router.GET("/health-check/redis", c.HealthRedisController.CheckHealthRedis)
+	router.GET("/health-check/api", c.HealthController.Ping)
+	router.GET("/health-check/db/mongo", c.HealthMongoDBController.Ping)
+	router.GET("/health-check/db/mysql", c.HealthMySQLController.Ping)
+	router.GET("/health-check/rabbitmq", c.HealthRabbitMQController.Ping)
+	router.GET("/health-check/redis", c.HealthRedisController.Ping)
 
 	return router
 }

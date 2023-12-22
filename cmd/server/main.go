@@ -56,7 +56,7 @@ func main() {
 	// Connect to MongoDB
 	var mongoDBActions databases.MongoDBActionsI = databases.NewMongoDBActions(app.ctx, &configParams.Mongo)
 
-	mongoClient, err := mongoDBActions.MongoConnect()
+	mongoClient, err := mongoDBActions.Connect()
 	if err != nil {
 		log.Fatal("Failed to connect to MongoDB:", err)
 	}
@@ -64,7 +64,7 @@ func main() {
 	// Connect to MySQL
 	var mysqlDBActions databases.MySQLActionsI = databases.NewMySQLActions(app.ctx, &configParams.Mysql)
 
-	mysqlClient, err := mysqlDBActions.MySQLConnect()
+	mysqlClient, err := mysqlDBActions.Connect()
 	if err != nil {
 		log.Fatal("Failed to connect to MySQL:", err)
 	}

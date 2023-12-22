@@ -81,7 +81,7 @@ func TestHealthRabbitMQController_CheckHealthRabbitMQ(t *testing.T) {
 				configParams:    tt.fields.configParams,
 				rabbitMQActions: tt.fields.rabbitMQActions,
 			}
-			router.GET("/test", h.CheckHealthRabbitMQ)
+			router.GET("/test", h.Ping)
 
 			req, err := http.NewRequest("GET", "/test", nil)
 			if err != nil {

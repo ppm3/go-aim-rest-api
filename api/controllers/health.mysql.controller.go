@@ -27,12 +27,12 @@ func NewHealthMySQLController(ctx context.Context, c *databases.Clients, m datab
 	}
 }
 
-func (h *HealthMySQLController) CheckHealthDB(c *gin.Context) {
+func (h *HealthMySQLController) Ping(c *gin.Context) {
 	mysqlCon := h.clients.MySQL
 	uptime := time.Now().Unix()
 
 	// Check the connection
-	_, err := h.mysqlActions.MySQLPing(mysqlCon)
+	_, err := h.mysqlActions.Ping(mysqlCon)
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 	} else {
